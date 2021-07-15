@@ -1,6 +1,6 @@
-- file: landing-page
+format: jb-book
+root: landing-page
 
-- part: Part I measurement
-  chapters:
+chapters:
   - file: Measurement - synthetic control.ipynb
 
