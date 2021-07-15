@@ -4,4 +4,3 @@ parts:
   - caption: Part I Measurement
     chapters:
     - file: Measurement - synthetic control.ipynb
-  - caption: Part II
