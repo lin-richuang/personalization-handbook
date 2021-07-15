@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Measurement - synthetic control method (SCM) &#8212; A gentle introduction to personalization</title>
+    <title>What is SCM &#8212; A gentle introduction to personalization</title>
     
   <link href="_static/css/theme.css" rel="stylesheet" />
   <link href="_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
@@ -94,7 +94,7 @@
 <ul class="current nav bd-sidenav">
  <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
-   Measurement - synthetic control method (SCM)
+   What is SCM
   </a>
  </li>
 </ul>
@@ -187,49 +187,42 @@
                 <ul class="visible nav section-nav flex-column">
  <li class="toc-h1 nav-item toc-entry">
   <a class="reference internal nav-link" href="#">
-   Measurement - synthetic control method (SCM)
+   What is SCM
   </a>
   <ul class="visible nav section-nav flex-column">
    <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#what-is-scm">
-     What is SCM
+    <a class="reference internal nav-link" href="#when-to-use-scm">
+     When to use SCM
     </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h3 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#when-to-use-scm">
-       When to use SCM
-      </a>
-     </li>
-     <li class="toc-h3 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#strengths-of-scm">
-       Strengths of SCM
-      </a>
-     </li>
-     <li class="toc-h3 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#challenges-with-scm">
-       Challenges with SCM
-      </a>
-     </li>
-    </ul>
    </li>
    <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#california-proposition-99">
-     California proposition 99
+    <a class="reference internal nav-link" href="#strengths-of-scm">
+     Strengths of SCM
     </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h3 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#clean-data-for-downstream-work">
-       Clean data for downstream work
-      </a>
-     </li>
-    </ul>
    </li>
    <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#implement-scm">
-     Implement SCM
+    <a class="reference internal nav-link" href="#challenges-with-scm">
+     Challenges with SCM
     </a>
    </li>
   </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#california-proposition-99">
+   California proposition 99
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#clean-data-for-downstream-work">
+     Clean data for downstream work
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#implement-scm">
+   Implement SCM
+  </a>
  </li>
  <li class="toc-h1 nav-item toc-entry">
   <a class="reference internal nav-link" href="#outliers">
@@ -262,10 +255,8 @@
         
               <div>
                 
-  <div class="section" id="measurement-synthetic-control-method-scm">
-<h1>Measurement - synthetic control method (SCM)<a class="headerlink" href="#measurement-synthetic-control-method-scm" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="what-is-scm">
-<h2>What is SCM<a class="headerlink" href="#what-is-scm" title="Permalink to this headline">¶</a></h2>
+  <div class="section" id="what-is-scm">
+<h1>What is SCM<a class="headerlink" href="#what-is-scm" title="Permalink to this headline">¶</a></h1>
 <p>SCM is a quasi-experimental design to do causal inference, similar to diff-in-diff (DID).</p>
 <p>In the situation where the random selection is not feasible, or there might be spillovers between treatments and control, quasi-experiments are used to measure the impact of the treatments.</p>
 <p>The challenge with DID method is that it requires similar covariates between the treated and control groups, which is not always feasible.
@@ -274,18 +265,18 @@ Another problem is that if the frowth trend from the treatment is different from
 SCM generates control set by providing formal criteria and explains the relative importance of each donor by employing linear models.
 What is more, the choice of synthetic control does not rely on post-intervention outcomes, making it impossible to cherry-pick the study design that may affect the conclusions.</p>
 <div class="section" id="when-to-use-scm">
-<h3>When to use SCM<a class="headerlink" href="#when-to-use-scm" title="Permalink to this headline">¶</a></h3>
+<h2>When to use SCM<a class="headerlink" href="#when-to-use-scm" title="Permalink to this headline">¶</a></h2>
 <p>SCM is best method when the experiment takes place at aggregate level, eg. country, state, county, and there are only a handful of control and test cases. Due to these charateristics, SCM is the go-to method for large-scale program evaluation.</p>
 </div>
 <div class="section" id="strengths-of-scm">
-<h3>Strengths of SCM<a class="headerlink" href="#strengths-of-scm" title="Permalink to this headline">¶</a></h3>
+<h2>Strengths of SCM<a class="headerlink" href="#strengths-of-scm" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><p>First and foremost, SCM generated counterfactual is almost the same the treated case.</p></li>
 <li><p>Secondly, SCM is easy to explain since it mostly employing linear models. You can explain the weights of each covariates by using the weights of the model.</p></li>
 </ul>
 </div>
 <div class="section" id="challenges-with-scm">
-<h3>Challenges with SCM<a class="headerlink" href="#challenges-with-scm" title="Permalink to this headline">¶</a></h3>
+<h2>Challenges with SCM<a class="headerlink" href="#challenges-with-scm" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><p>By design, SCM works at aggregate level, not individual level.</p></li>
 <li><p>Also, it requires a relatively long pre-treatment period so that it could model good counterfactual data.</p></li>
@@ -307,7 +298,7 @@ What is more, the choice of synthetic control does not rely on post-intervention
 </div>
 </div>
 <div class="section" id="california-proposition-99">
-<h2>California proposition 99<a class="headerlink" href="#california-proposition-99" title="Permalink to this headline">¶</a></h2>
+<h1>California proposition 99<a class="headerlink" href="#california-proposition-99" title="Permalink to this headline">¶</a></h1>
 <p>To see it in action, let’s consider the problem of estimating the effect of cigarette taxation on its consumption.</p>
 <p>In 1988, California passed a famous Tobacco Tax and Health Protection Act, which became known as Proposition 99.</p>
 <p>“Its primary effect is to impose a 25-cent per pack state excise tax on the sale of tobacco cigarettes within California, with approximately equivalent excise taxes similarly imposed on the retail sale of other commercial tobacco products, such as cigars and chewing tobacco. Additional restrictions placed on the sale of tobacco include a ban on cigarette vending machines in public areas accessible by juveniles and a ban on the individual sale of single cigarettes. Revenue generated by the act was earmarked for various environmental and health care programs, and anti-tobacco advertisements.”</p>
@@ -456,12 +447,12 @@ What is more, the choice of synthetic control does not rely on post-intervention
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/Measurement - synthetic control_8_0.png" src="_images/Measurement - synthetic control_8_0.png" />
+<img alt="_images/Measurement - synthetic control_7_0.png" src="_images/Measurement - synthetic control_7_0.png" />
 </div>
 </div>
 <p>To answer the question whether Proposition 99 had an effect on cigarette consumption, we will use the pre-intervention period to build a synthetic control, which means we will build a fake state that resembles very closely the trend of California.</p>
 <div class="section" id="clean-data-for-downstream-work">
-<h3>Clean data for downstream work<a class="headerlink" href="#clean-data-for-downstream-work" title="Permalink to this headline">¶</a></h3>
+<h2>Clean data for downstream work<a class="headerlink" href="#clean-data-for-downstream-work" title="Permalink to this headline">¶</a></h2>
 <p>Ideally we want to see the data with each state as columns, and dates as rows, so that we can use any machine learning model to use other states as variables and we represent the outcome as a weighted average of the units (i.e. a dot product of the each state PacksPerCapita and regression weight).</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -584,7 +575,7 @@ What is more, the choice of synthetic control does not rely on post-intervention
 </div>
 </div>
 <div class="section" id="implement-scm">
-<h2>Implement SCM<a class="headerlink" href="#implement-scm" title="Permalink to this headline">¶</a></h2>
+<h1>Implement SCM<a class="headerlink" href="#implement-scm" title="Permalink to this headline">¶</a></h1>
 <p>Here we will try to build a fake unit that resemble the treated unit.</p>
 <p>Linear regression is a very good model to build counterfactual becasue it allows us to find the weights of each state that can be rebuild to the new fake state.</p>
 <div class="cell docutils container">
@@ -699,7 +690,7 @@ What is more, the choice of synthetic control does not rely on post-intervention
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/Measurement - synthetic control_16_0.png" src="_images/Measurement - synthetic control_16_0.png" />
+<img alt="_images/Measurement - synthetic control_15_0.png" src="_images/Measurement - synthetic control_15_0.png" />
 </div>
 </div>
 <p>This looks perfect.</p>
@@ -737,8 +728,7 @@ What is more, the choice of synthetic control does not rely on post-intervention
 37        Wyoming    0.003
 </pre></div>
 </div>
-<img alt="_images/Measurement - synthetic control_18_1.png" src="_images/Measurement - synthetic control_18_1.png" />
-</div>
+<img alt="_images/Measurement - synthetic control_17_1.png" src="_images/Measurement - synthetic control_17_1.png" />
 </div>
 </div>
 </div>
@@ -780,7 +770,7 @@ What is more, the choice of synthetic control does not rely on post-intervention
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/Measurement - synthetic control_20_0.png" src="_images/Measurement - synthetic control_20_0.png" />
+<img alt="_images/Measurement - synthetic control_19_0.png" src="_images/Measurement - synthetic control_19_0.png" />
 </div>
 </div>
 <p>Here, 2 things jumped out:</p>
@@ -832,7 +822,7 @@ removing outliers:
 38      California   9.950632
 </pre></div>
 </div>
-<img alt="_images/Measurement - synthetic control_23_1.png" src="_images/Measurement - synthetic control_23_1.png" />
+<img alt="_images/Measurement - synthetic control_22_1.png" src="_images/Measurement - synthetic control_22_1.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -851,7 +841,7 @@ removing outliers:
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/Measurement - synthetic control_24_0.png" src="_images/Measurement - synthetic control_24_0.png" />
+<img alt="_images/Measurement - synthetic control_23_0.png" src="_images/Measurement - synthetic control_23_0.png" />
 </div>
 </div>
 </div>
@@ -882,7 +872,7 @@ removing outliers:
 13  Nebraska    0.002
 </pre></div>
 </div>
-<img alt="_images/Measurement - synthetic control_26_1.png" src="_images/Measurement - synthetic control_26_1.png" />
+<img alt="_images/Measurement - synthetic control_25_1.png" src="_images/Measurement - synthetic control_25_1.png" />
 </div>
 </div>
 </div>
@@ -1007,7 +997,7 @@ Name: California, dtype: float64
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/Measurement - synthetic control_38_0.png" src="_images/Measurement - synthetic control_38_0.png" />
+<img alt="_images/Measurement - synthetic control_37_0.png" src="_images/Measurement - synthetic control_37_0.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1035,7 +1025,7 @@ Name: California, dtype: float64
 14  North Carolina    0.016
 </pre></div>
 </div>
-<img alt="_images/Measurement - synthetic control_39_1.png" src="_images/Measurement - synthetic control_39_1.png" />
+<img alt="_images/Measurement - synthetic control_38_1.png" src="_images/Measurement - synthetic control_38_1.png" />
 </div>
 </div>
 <div class="cell docutils container">
