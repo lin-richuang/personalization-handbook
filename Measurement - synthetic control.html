@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>What is SCM &#8212; A gentle introduction to personalization</title>
+    <title>Measurement - Synthetic control method (SCM) &#8212; A gentle introduction to personalization</title>
     
   <link href="_static/css/theme.css" rel="stylesheet" />
   <link href="_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
@@ -94,7 +94,7 @@
 <ul class="current nav bd-sidenav">
  <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
-   What is SCM
+   Measurement - Synthetic control method (SCM)
   </a>
  </li>
 </ul>
@@ -185,61 +185,61 @@
             </div>
             <nav id="bd-toc-nav">
                 <ul class="visible nav section-nav flex-column">
- <li class="toc-h1 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#what-is-scm">
    What is SCM
   </a>
-  <ul class="visible nav section-nav flex-column">
-   <li class="toc-h2 nav-item toc-entry">
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#when-to-use-scm">
      When to use SCM
     </a>
    </li>
-   <li class="toc-h2 nav-item toc-entry">
+   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#strengths-of-scm">
      Strengths of SCM
     </a>
    </li>
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#challenges-with-scm">
-     Challenges with SCM
-    </a>
-   </li>
   </ul>
  </li>
- <li class="toc-h1 nav-item toc-entry">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#challenges-with-scm">
+   Challenges with SCM
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#california-proposition-99">
    California proposition 99
   </a>
-  <ul class="visible nav section-nav flex-column">
-   <li class="toc-h2 nav-item toc-entry">
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#clean-data-for-downstream-work">
      Clean data for downstream work
     </a>
    </li>
   </ul>
  </li>
- <li class="toc-h1 nav-item toc-entry">
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#implement-scm">
    Implement SCM
   </a>
  </li>
- <li class="toc-h1 nav-item toc-entry">
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#outliers">
    Outliers
   </a>
  </li>
- <li class="toc-h1 nav-item toc-entry">
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#recalculate-california-synthetic-control-after-removing-noise">
    Recalculate california synthetic control after removing noise
   </a>
  </li>
- <li class="toc-h1 nav-item toc-entry">
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#confidence-intervals">
    Confidence Intervals
   </a>
  </li>
- <li class="toc-h1 nav-item toc-entry">
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#placebo-state">
    Placebo state
   </a>
@@ -255,8 +255,10 @@
         
               <div>
                 
-  <div class="section" id="what-is-scm">
-<h1>What is SCM<a class="headerlink" href="#what-is-scm" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="measurement-synthetic-control-method-scm">
+<h1>Measurement - Synthetic control method (SCM)<a class="headerlink" href="#measurement-synthetic-control-method-scm" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="what-is-scm">
+<h2>What is SCM<a class="headerlink" href="#what-is-scm" title="Permalink to this headline">¶</a></h2>
 <p>SCM is a quasi-experimental design to do causal inference, similar to diff-in-diff (DID).</p>
 <p>In the situation where the random selection is not feasible, or there might be spillovers between treatments and control, quasi-experiments are used to measure the impact of the treatments.</p>
 <p>The challenge with DID method is that it requires similar covariates between the treated and control groups, which is not always feasible.
@@ -265,15 +267,16 @@ Another problem is that if the frowth trend from the treatment is different from
 SCM generates control set by providing formal criteria and explains the relative importance of each donor by employing linear models.
 What is more, the choice of synthetic control does not rely on post-intervention outcomes, making it impossible to cherry-pick the study design that may affect the conclusions.</p>
 <div class="section" id="when-to-use-scm">
-<h2>When to use SCM<a class="headerlink" href="#when-to-use-scm" title="Permalink to this headline">¶</a></h2>
+<h3>When to use SCM<a class="headerlink" href="#when-to-use-scm" title="Permalink to this headline">¶</a></h3>
 <p>SCM is best method when the experiment takes place at aggregate level, eg. country, state, county, and there are only a handful of control and test cases. Due to these charateristics, SCM is the go-to method for large-scale program evaluation.</p>
 </div>
 <div class="section" id="strengths-of-scm">
-<h2>Strengths of SCM<a class="headerlink" href="#strengths-of-scm" title="Permalink to this headline">¶</a></h2>
+<h3>Strengths of SCM<a class="headerlink" href="#strengths-of-scm" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>First and foremost, SCM generated counterfactual is almost the same the treated case.</p></li>
 <li><p>Secondly, SCM is easy to explain since it mostly employing linear models. You can explain the weights of each covariates by using the weights of the model.</p></li>
 </ul>
+</div>
 </div>
 <div class="section" id="challenges-with-scm">
 <h2>Challenges with SCM<a class="headerlink" href="#challenges-with-scm" title="Permalink to this headline">¶</a></h2>
@@ -296,9 +299,8 @@ What is more, the choice of synthetic control does not rely on post-intervention
 </div>
 </div>
 </div>
-</div>
 <div class="section" id="california-proposition-99">
-<h1>California proposition 99<a class="headerlink" href="#california-proposition-99" title="Permalink to this headline">¶</a></h1>
+<h2>California proposition 99<a class="headerlink" href="#california-proposition-99" title="Permalink to this headline">¶</a></h2>
 <p>To see it in action, let’s consider the problem of estimating the effect of cigarette taxation on its consumption.</p>
 <p>In 1988, California passed a famous Tobacco Tax and Health Protection Act, which became known as Proposition 99.</p>
 <p>“Its primary effect is to impose a 25-cent per pack state excise tax on the sale of tobacco cigarettes within California, with approximately equivalent excise taxes similarly imposed on the retail sale of other commercial tobacco products, such as cigars and chewing tobacco. Additional restrictions placed on the sale of tobacco include a ban on cigarette vending machines in public areas accessible by juveniles and a ban on the individual sale of single cigarettes. Revenue generated by the act was earmarked for various environmental and health care programs, and anti-tobacco advertisements.”</p>
@@ -452,7 +454,7 @@ What is more, the choice of synthetic control does not rely on post-intervention
 </div>
 <p>To answer the question whether Proposition 99 had an effect on cigarette consumption, we will use the pre-intervention period to build a synthetic control, which means we will build a fake state that resembles very closely the trend of California.</p>
 <div class="section" id="clean-data-for-downstream-work">
-<h2>Clean data for downstream work<a class="headerlink" href="#clean-data-for-downstream-work" title="Permalink to this headline">¶</a></h2>
+<h3>Clean data for downstream work<a class="headerlink" href="#clean-data-for-downstream-work" title="Permalink to this headline">¶</a></h3>
 <p>Ideally we want to see the data with each state as columns, and dates as rows, so that we can use any machine learning model to use other states as variables and we represent the outcome as a weighted average of the units (i.e. a dot product of the each state PacksPerCapita and regression weight).</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -575,7 +577,7 @@ What is more, the choice of synthetic control does not rely on post-intervention
 </div>
 </div>
 <div class="section" id="implement-scm">
-<h1>Implement SCM<a class="headerlink" href="#implement-scm" title="Permalink to this headline">¶</a></h1>
+<h2>Implement SCM<a class="headerlink" href="#implement-scm" title="Permalink to this headline">¶</a></h2>
 <p>Here we will try to build a fake unit that resemble the treated unit.</p>
 <p>Linear regression is a very good model to build counterfactual becasue it allows us to find the weights of each state that can be rebuild to the new fake state.</p>
 <div class="cell docutils container">
@@ -733,7 +735,7 @@ What is more, the choice of synthetic control does not rely on post-intervention
 </div>
 </div>
 <div class="section" id="outliers">
-<h1>Outliers<a class="headerlink" href="#outliers" title="Permalink to this headline">¶</a></h1>
+<h2>Outliers<a class="headerlink" href="#outliers" title="Permalink to this headline">¶</a></h2>
 <p>Here we premute the treated and control exhaustively. Since we only have one treated unit, this means that for each unit, we pretend it is the treated while the others are the control.</p>
 <p>in the end, we will have one synthetic control and effect estimates for each state. What this does is it pretends that the treatment actually happened for another state, not California, and see what would have been the estimated .</p>
 <div class="cell docutils container">
@@ -846,7 +848,7 @@ removing outliers:
 </div>
 </div>
 <div class="section" id="recalculate-california-synthetic-control-after-removing-noise">
-<h1>Recalculate california synthetic control after removing noise<a class="headerlink" href="#recalculate-california-synthetic-control-after-removing-noise" title="Permalink to this headline">¶</a></h1>
+<h2>Recalculate california synthetic control after removing noise<a class="headerlink" href="#recalculate-california-synthetic-control-after-removing-noise" title="Permalink to this headline">¶</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Use the non outlier states as new pool</span>
@@ -877,7 +879,7 @@ removing outliers:
 </div>
 </div>
 <div class="section" id="confidence-intervals">
-<h1>Confidence Intervals<a class="headerlink" href="#confidence-intervals" title="Permalink to this headline">¶</a></h1>
+<h2>Confidence Intervals<a class="headerlink" href="#confidence-intervals" title="Permalink to this headline">¶</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">test_df</span> <span class="o">=</span> <span class="n">cal_non_outlier</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">1990</span><span class="p">:]</span>
@@ -957,7 +959,7 @@ removing outliers:
 </div>
 </div>
 <div class="section" id="placebo-state">
-<h1>Placebo state<a class="headerlink" href="#placebo-state" title="Permalink to this headline">¶</a></h1>
+<h2>Placebo state<a class="headerlink" href="#placebo-state" title="Permalink to this headline">¶</a></h2>
 <p>SCM does not offer standard errors, which makes it harder to get the significance of performance outcome. One way to evaluate this is to perform a placebo test.</p>
 <p>Placebo tests are more commonly used in medical experiments. During a drug experiment, patients who are administrated drugs tend to show a positive recovery as they believe that the new drug will recover them. This psychological effect also impact the outcome of the experiment. To avoid this, placebos were introduced. Hence the actual impact of the drug will be measured as the difference between the treatment with and without placebo.</p>
 <p>This practice can be used measure the effectiveness of the SCM as well. The treatment state is replaced with one or many of the control state and synthetic control is generated for this control state. This will prove that there is no identifiable effect on the control from the treatment.</p>
@@ -1044,6 +1046,7 @@ Name: California, dtype: float64
 </div>
 </div>
 <p>Treated California sales go down by 25.0% (mean lift) with CI [-30.7%,-19.4%]. In comparison, Montana untreated, placebo sales go up around 7.3%, with CI [3.6%, 10.9%]. Therefore, SCM measure signifies that the treatment was meaningful.</p>
+</div>
 </div>
 
     <script type="text/x-thebe-config">
