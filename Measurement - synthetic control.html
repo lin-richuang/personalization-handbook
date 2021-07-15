@@ -238,30 +238,11 @@
   <a class="reference internal nav-link" href="#confidence-intervals">
    Confidence Intervals
   </a>
-  <ul class="visible nav section-nav flex-column">
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#confidence-intervals-using-the-t-distribution">
-     Confidence Intervals Using the t Distribution
-    </a>
-   </li>
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#confidence-intervals-using-the-normal-distribution">
-     Confidence Intervals Using the Normal Distribution
-    </a>
-   </li>
-  </ul>
  </li>
  <li class="toc-h1 nav-item toc-entry">
   <a class="reference internal nav-link" href="#placebo-state">
    Placebo state
   </a>
-  <ul class="visible nav section-nav flex-column">
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#treated-california-sales-go-down-by-25-0-mean-lift-with-ci-30-7-19-4-in-comparison-montana-untreated-placebo-sales-go-up-around-7-3-with-ci-3-6-10-9-therefore-scm-measure-signifies-that-the-treatment-was-meaningful">
-     Treated California sales go down by 25.0% (mean lift) with CI [-30.7%,-19.4%]. In comparison, Montana untreated, placebo sales go up around 7.3%, with CI [3.6%, 10.9%]. Therefore, SCM measure signifies that the treatment was meaningful.
-    </a>
-   </li>
-  </ul>
  </li>
 </ul>
 
@@ -309,6 +290,9 @@ What is more, the choice of synthetic control does not rely on post-intervention
 
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s1">&#39;display.max_columns&#39;</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">Lasso</span><span class="p">,</span> <span class="n">ElasticNet</span><span class="p">,</span> <span class="n">Ridge</span>
+<span class="kn">import</span> <span class="nn">scipy.stats</span> <span class="k">as</span> <span class="nn">st</span>
 </pre></div>
 </div>
 </div>
@@ -410,7 +394,7 @@ What is more, the choice of synthetic control does not rely on post-intervention
 </table>
 </div></div></div>
 </div>
-<div class="cell tag_hide-output docutils container">
+<div class="cell tag_hide-output tag_hide-input docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -433,20 +417,6 @@ What is more, the choice of synthetic control does not rely on post-intervention
 
 <span class="n">write_local_style</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;data/style/mystyle.mplstyle&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
-<span class="o">&lt;</span><span class="n">ipython</span><span class="o">-</span><span class="nb">input</span><span class="o">-</span><span class="mi">4</span><span class="o">-</span><span class="mi">2773</span><span class="n">c532c10c</span><span class="o">&gt;</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> 
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="c1"># style plots</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="k">def</span> <span class="nf">write_local_style</span><span class="p">():</span>
-
-<span class="ne">ModuleNotFoundError</span>: No module named &#39;matplotlib&#39;
 </pre></div>
 </div>
 </div>
@@ -490,15 +460,10 @@ What is more, the choice of synthetic control does not rely on post-intervention
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">inverted</span> <span class="o">=</span> <span class="p">(</span><span class="n">df</span>   <span class="c1"># filter pre-intervention period</span>
-<span class="o">.</span><span class="n">pivot</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="s1">&#39;State&#39;</span><span class="p">,</span> <span class="n">columns</span> <span class="o">=</span> <span class="s1">&#39;Year&#39;</span><span class="p">)[</span><span class="s1">&#39;PacksPerCapita&#39;</span><span class="p">]</span>
-<span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="c1"># flip the table to have one column per state</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">inverted</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+            <span class="o">.</span><span class="n">pivot</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="s1">&#39;State&#39;</span><span class="p">,</span> <span class="n">columns</span> <span class="o">=</span> <span class="s1">&#39;Year&#39;</span><span class="p">)[</span><span class="s1">&#39;PacksPerCapita&#39;</span><span class="p">]</span>
+            <span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="c1"># flip the table to have one column per state</span>
+
+<span class="n">inverted</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -618,13 +583,6 @@ What is more, the choice of synthetic control does not rely on post-intervention
 <p>For modeling, we run a regulated regression such as Lasso, Ridge or ElasticNet because we don’t want the model to overfit. The regression will return as a set of weights that minimize the square difference between the treated unit and the units in the other states.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">Lasso</span><span class="p">,</span> <span class="n">ElasticNet</span><span class="p">,</span> <span class="n">Ridge</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># training data would be before 1989 when the state of California introduced the Act</span>
 <span class="n">train_df</span> <span class="o">=</span> <span class="n">inverted</span><span class="o">.</span><span class="n">loc</span><span class="p">[:</span><span class="mi">1988</span><span class="p">]</span>
 </pre></div>
@@ -704,7 +662,7 @@ What is more, the choice of synthetic control does not rely on post-intervention
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/Measurement - synthetic control_20_0.png" src="_images/Measurement - synthetic control_20_0.png" />
+<img alt="_images/Measurement - synthetic control_18_0.png" src="_images/Measurement - synthetic control_18_0.png" />
 </div>
 </div>
 </div>
@@ -760,7 +718,7 @@ What is more, the choice of synthetic control does not rely on post-intervention
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/Measurement - synthetic control_25_0.png" src="_images/Measurement - synthetic control_25_0.png" />
+<img alt="_images/Measurement - synthetic control_23_0.png" src="_images/Measurement - synthetic control_23_0.png" />
 </div>
 </div>
 <p>Since the states are pooly fit, we would remove those outliers from our analysis.</p>
@@ -796,7 +754,7 @@ What is more, the choice of synthetic control does not rely on post-intervention
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Upper percentile of mse is 5.3694883758656555
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Upper percentile of mse is 5.369488375865694
 removing outliers:
              State        mse
 3      Connecticut   5.474684
@@ -811,7 +769,7 @@ removing outliers:
 38      California   9.950632
 </pre></div>
 </div>
-<img alt="_images/Measurement - synthetic control_28_1.png" src="_images/Measurement - synthetic control_28_1.png" />
+<img alt="_images/Measurement - synthetic control_26_1.png" src="_images/Measurement - synthetic control_26_1.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -830,7 +788,7 @@ removing outliers:
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/Measurement - synthetic control_29_0.png" src="_images/Measurement - synthetic control_29_0.png" />
+<img alt="_images/Measurement - synthetic control_27_0.png" src="_images/Measurement - synthetic control_27_0.png" />
 </div>
 </div>
 </div>
@@ -866,7 +824,7 @@ removing outliers:
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/Measurement - synthetic control_33_0.png" src="_images/Measurement - synthetic control_33_0.png" />
+<img alt="_images/Measurement - synthetic control_31_0.png" src="_images/Measurement - synthetic control_31_0.png" />
 </div>
 </div>
 </div>
@@ -883,13 +841,6 @@ removing outliers:
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">scipy.stats</span> <span class="k">as</span> <span class="nn">st</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Sample mean</span>
 <span class="n">x_bar</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
 <span class="n">x_bar</span>
@@ -897,13 +848,12 @@ removing outliers:
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-0.25021991433494045
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-0.2502199143349404
 </pre></div>
 </div>
 </div>
 </div>
-<div class="section" id="confidence-intervals-using-the-t-distribution">
-<h2>Confidence Intervals Using the t Distribution<a class="headerlink" href="#confidence-intervals-using-the-t-distribution" title="Permalink to this headline">¶</a></h2>
+<p>Confidence Intervals Using the t Distribution</p>
 <p>If we’re working with a small sample (n &lt;30), we can use the t.interval() function from the scipy.stats library to calculate a confidence interval for a population mean.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -924,7 +874,7 @@ removing outliers:
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(-0.25021991433494045, -0.30690450934438895, -0.19353531932549195)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(-0.2502199143349404, -0.30690450934438884, -0.19353531932549192)
 </pre></div>
 </div>
 </div>
@@ -937,7 +887,7 @@ removing outliers:
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(-0.30690450934438895, -0.19353531932549195)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(-0.30690450934438884, -0.19353531932549192)
 </pre></div>
 </div>
 </div>
@@ -952,14 +902,12 @@ removing outliers:
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(-0.3069045093443889, -0.1935353193254919)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(-0.30690450934438884, -0.19353531932549195)
 </pre></div>
 </div>
 </div>
 </div>
-</div>
-<div class="section" id="confidence-intervals-using-the-normal-distribution">
-<h2>Confidence Intervals Using the Normal Distribution<a class="headerlink" href="#confidence-intervals-using-the-normal-distribution" title="Permalink to this headline">¶</a></h2>
+<p>Confidence Intervals Using the Normal Distribution</p>
 <p>If we’re working with larger samples (n≥30), we can assume that the sampling distribution of the sample mean is normally distributed (thanks to the Central Limit Theorem) and can instead use the norm.interval() function from the scipy.stats library.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -969,9 +917,8 @@ removing outliers:
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(-0.30008205133721116, -0.20035777733266974)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(-0.3000820513372111, -0.2003577773326697)
 </pre></div>
-</div>
 </div>
 </div>
 </div>
@@ -1017,7 +964,7 @@ Name: California, dtype: float64
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/Measurement - synthetic control_47_0.png" src="_images/Measurement - synthetic control_47_0.png" />
+<img alt="_images/Measurement - synthetic control_44_0.png" src="_images/Measurement - synthetic control_44_0.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1047,27 +994,13 @@ Name: California, dtype: float64
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mon_weights</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>State      AlabamaArkansasColoradoDelawareGeorgiaIdahoIll...
-weights                                                0.923
-dtype: object
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># New plot without outliers as control</span>
 <span class="n">print_actual_synth</span><span class="p">(</span><span class="n">mon_non_outlier</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="s1">&#39;Montana&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/Measurement - synthetic control_50_0.png" src="_images/Measurement - synthetic control_50_0.png" />
+<img alt="_images/Measurement - synthetic control_46_0.png" src="_images/Measurement - synthetic control_46_0.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1151,14 +1084,12 @@ dtype: object
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(0.07250751767040958, 0.036094979268137733, 0.10892005607268143)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(0.07250751767040962, 0.036094979268137824, 0.10892005607268143)
 </pre></div>
 </div>
 </div>
 </div>
-<div class="section" id="treated-california-sales-go-down-by-25-0-mean-lift-with-ci-30-7-19-4-in-comparison-montana-untreated-placebo-sales-go-up-around-7-3-with-ci-3-6-10-9-therefore-scm-measure-signifies-that-the-treatment-was-meaningful">
-<h2>Treated California sales go down by 25.0% (mean lift) with CI [-30.7%,-19.4%]. In comparison, Montana untreated, placebo sales go up around 7.3%, with CI [3.6%, 10.9%]. Therefore, SCM measure signifies that the treatment was meaningful.<a class="headerlink" href="#treated-california-sales-go-down-by-25-0-mean-lift-with-ci-30-7-19-4-in-comparison-montana-untreated-placebo-sales-go-up-around-7-3-with-ci-3-6-10-9-therefore-scm-measure-signifies-that-the-treatment-was-meaningful" title="Permalink to this headline">¶</a></h2>
-</div>
+<p>Treated California sales go down by 25.0% (mean lift) with CI [-30.7%,-19.4%]. In comparison, Montana untreated, placebo sales go up around 7.3%, with CI [3.6%, 10.9%]. Therefore, SCM measure signifies that the treatment was meaningful.</p>
 </div>
 
     <script type="text/x-thebe-config">
