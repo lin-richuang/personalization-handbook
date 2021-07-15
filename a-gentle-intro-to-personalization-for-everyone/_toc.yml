@@ -1,6 +1,0 @@
-format: jb-book
-root: landing-page
-
-chapters:
-  - file: Measurement - synthetic control.ipynb
-
