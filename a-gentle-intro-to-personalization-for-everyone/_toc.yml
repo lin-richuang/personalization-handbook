@@ -1,0 +1,6 @@
+- file: landing-page
+
+- part: Part I measurement
+  chapters:
+  - file: Measurement - synthetic control.ipynb
+
