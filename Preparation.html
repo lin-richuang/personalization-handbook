@@ -1,0 +1,387 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Download data from online and save to local &#8212; A gentle introduction to personalization</title>
+    
+  <link href="_static/css/theme.css" rel="stylesheet" />
+  <link href="_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/sphinx-book-theme.acff12b8f9c144ce68a297486a2fa670.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="_static/js/index.1c5a1a01449ed65a7b51.js">
+
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/togglebutton.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="index.html">
+      
+      
+      <h1 class="site-logo" id="site-title">A gentle introduction to personalization</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <div class="bd-toc-item active">
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="landing-page.html">
+   Landing page
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Part I Measurement
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="Measurement%20-%20synthetic%20control.html">
+   Measurement - Synthetic control method (SCM)
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="_sources/Preparation.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/executablebooks/jupyter-book/master?urlpath=tree/Preparation.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   Download data from online and save to local
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#create-style-plots">
+   Create style plots
+  </a>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> nb_black
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<script type="application/javascript">
+            setTimeout(function() {
+                var nbb_cell_id = 1;
+                var nbb_unformatted_code = "%load_ext nb_black";
+                var nbb_formatted_code = "%load_ext nb_black";
+                var nbb_cells = Jupyter.notebook.get_cells();
+                for (var i = 0; i < nbb_cells.length; ++i) {
+                    if (nbb_cells[i].input_prompt_number == nbb_cell_id) {
+                        if (nbb_cells[i].get_text() == nbb_unformatted_code) {
+                             nbb_cells[i].set_text(nbb_formatted_code);
+                        }
+                        break;
+                    }
+                }
+            }, 500);
+            </script></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+
+<span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+
+<span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s2">&quot;display.max_columns&quot;</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<script type="application/javascript">
+            setTimeout(function() {
+                var nbb_cell_id = 2;
+                var nbb_unformatted_code = "import pandas as pd\nimport warnings\n\nwarnings.simplefilter(\"ignore\")\n\npd.set_option(\"display.max_columns\", 8)";
+                var nbb_formatted_code = "import pandas as pd\nimport warnings\n\nwarnings.simplefilter(\"ignore\")\n\npd.set_option(\"display.max_columns\", 8)";
+                var nbb_cells = Jupyter.notebook.get_cells();
+                for (var i = 0; i < nbb_cells.length; ++i) {
+                    if (nbb_cells[i].input_prompt_number == nbb_cell_id) {
+                        if (nbb_cells[i].get_text() == nbb_unformatted_code) {
+                             nbb_cells[i].set_text(nbb_formatted_code);
+                        }
+                        break;
+                    }
+                }
+            }, 500);
+            </script></div>
+</div>
+<div class="section" id="download-data-from-online-and-save-to-local">
+<h1>Download data from online and save to local<a class="headerlink" href="#download-data-from-online-and-save-to-local" title="Permalink to this headline">¶</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Download data from online source, and store locally</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;https://raw.githubusercontent.com/synth-inference/synthdid/master/data/california_prop99.csv&#39;</span><span class="p">,</span>
+                <span class="n">sep</span> <span class="o">=</span> <span class="s1">&#39;;&#39;</span><span class="p">)</span>
+
+<span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">&#39;data/california_prop99.csv&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<script type="application/javascript">
+            setTimeout(function() {
+                var nbb_cell_id = 3;
+                var nbb_unformatted_code = "# Download data from online source, and store locally\ndf = pd.read_csv('https://raw.githubusercontent.com/synth-inference/synthdid/master/data/california_prop99.csv',\n                sep = ';')\n\ndf.to_csv('data/california_prop99.csv')";
+                var nbb_formatted_code = "# Download data from online source, and store locally\ndf = pd.read_csv(\n    \"https://raw.githubusercontent.com/synth-inference/synthdid/master/data/california_prop99.csv\",\n    sep=\";\",\n)\n\ndf.to_csv(\"data/california_prop99.csv\")";
+                var nbb_cells = Jupyter.notebook.get_cells();
+                for (var i = 0; i < nbb_cells.length; ++i) {
+                    if (nbb_cells[i].input_prompt_number == nbb_cell_id) {
+                        if (nbb_cells[i].get_text() == nbb_unformatted_code) {
+                             nbb_cells[i].set_text(nbb_formatted_code);
+                        }
+                        break;
+                    }
+                }
+            }, 500);
+            </script></div>
+</div>
+</div>
+<div class="section" id="create-style-plots">
+<h1>Create style plots<a class="headerlink" href="#create-style-plots" title="Permalink to this headline">¶</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">write_local_style</span><span class="p">():</span>
+    <span class="n">mpltxt</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;patch.linewidth: 0.5</span><span class="se">\n</span><span class="s2">patch.facecolor: 348ABD  </span><span class="se">\n</span><span class="s2">patch.edgecolor: EEEEEE</span><span class="se">\n</span><span class="s2"></span>
+<span class="s2">    patch.antialiased: True</span><span class="se">\n</span><span class="s2">lines.solid_capstyle: round</span><span class="se">\n</span><span class="s2">font.size: 10.0</span><span class="se">\n</span><span class="s2"></span>
+<span class="s2">    font.family: Trebuchet MS</span><span class="se">\n</span><span class="s2">text.color: 575757</span><span class="se">\n</span><span class="s2">axes.facecolor: none</span><span class="se">\n</span><span class="s2"></span>
+<span class="s2">    axes.edgecolor: 575757</span><span class="se">\n</span><span class="s2">axes.spines.left   : True   </span><span class="se">\n</span><span class="s2">axes.spines.bottom : True</span><span class="se">\n</span><span class="s2"></span>
+<span class="s2">    axes.spines.top    : False</span><span class="se">\n</span><span class="s2">axes.spines.right  : False</span><span class="se">\n</span><span class="s2">axes.linewidth: 1</span><span class="se">\n</span><span class="s2">axes.grid: True</span><span class="se">\n</span><span class="s2"></span>
+<span class="s2">    axes.titlesize: x-large</span><span class="se">\n</span><span class="s2">axes.labelsize: large</span><span class="se">\n</span><span class="s2">axes.labelcolor: 575757</span><span class="se">\n</span><span class="s2">axes.axisbelow: True       </span><span class="se">\n</span><span class="s2"></span>
+<span class="s2">    axes.prop_cycle: cycler(&#39;color&#39;, [&#39;29ba74&#39;, &#39;6e6f73&#39;, &#39;295e7e&#39;, &#39;670f31&#39;, &#39;98b21c&#39;, &#39;9a9a9a&#39;, &#39;3ead92&#39;])</span><span class="se">\n</span><span class="s2"></span>
+<span class="s2">    xtick.color: 575757</span><span class="se">\n</span><span class="s2">xtick.direction: out</span><span class="se">\n</span><span class="s2">xtick.labelsize : medium</span><span class="se">\n</span><span class="s2">xtick.major.width: 1</span><span class="se">\n</span><span class="s2"></span>
+<span class="s2">    xtick.major.size: 4      </span><span class="se">\n</span><span class="s2">ytick.color: 575757</span><span class="se">\n</span><span class="s2">ytick.direction: out</span><span class="se">\n</span><span class="s2">ytick.labelsize : medium</span><span class="se">\n</span><span class="s2"></span>
+<span class="s2">    ytick.major.width: 1</span><span class="se">\n</span><span class="s2">ytick.major.size: 4</span><span class="se">\n</span><span class="s2">grid.color: none</span><span class="se">\n</span><span class="s2">figure.facecolor: none</span><span class="se">\n</span><span class="s2"></span>
+<span class="s2">    figure.edgecolor: 0.50</span><span class="se">\n</span><span class="s2">figure.dpi: 150      </span><span class="se">\n</span><span class="s2">&quot;&quot;&quot;</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;data/style/mystyle.mplstyle&quot;</span><span class="p">,</span> <span class="s2">&quot;w+&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">mpltxt</span><span class="p">)</span>
+
+
+<span class="n">write_local_style</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<script type="application/javascript">
+            setTimeout(function() {
+                var nbb_cell_id = 4;
+                var nbb_unformatted_code = "def write_local_style():\n    mpltxt = \"\"\"patch.linewidth: 0.5\\npatch.facecolor: 348ABD  \\npatch.edgecolor: EEEEEE\\n\n    patch.antialiased: True\\nlines.solid_capstyle: round\\nfont.size: 10.0\\n\n    font.family: Trebuchet MS\\ntext.color: 575757\\naxes.facecolor: none\\n\n    axes.edgecolor: 575757\\naxes.spines.left   : True   \\naxes.spines.bottom : True\\n\n    axes.spines.top    : False\\naxes.spines.right  : False\\naxes.linewidth: 1\\naxes.grid: True\\n\n    axes.titlesize: x-large\\naxes.labelsize: large\\naxes.labelcolor: 575757\\naxes.axisbelow: True       \\n\n    axes.prop_cycle: cycler('color', ['29ba74', '6e6f73', '295e7e', '670f31', '98b21c', '9a9a9a', '3ead92'])\\n\n    xtick.color: 575757\\nxtick.direction: out\\nxtick.labelsize : medium\\nxtick.major.width: 1\\n\n    xtick.major.size: 4      \\nytick.color: 575757\\nytick.direction: out\\nytick.labelsize : medium\\n\n    ytick.major.width: 1\\nytick.major.size: 4\\ngrid.color: none\\nfigure.facecolor: none\\n\n    figure.edgecolor: 0.50\\nfigure.dpi: 150      \\n\"\"\"\n\n    with open(\"data/style/mystyle.mplstyle\", \"w+\") as f:\n        f.write(mpltxt)\n\n\nwrite_local_style()";
+                var nbb_formatted_code = "def write_local_style():\n    mpltxt = \"\"\"patch.linewidth: 0.5\\npatch.facecolor: 348ABD  \\npatch.edgecolor: EEEEEE\\n\n    patch.antialiased: True\\nlines.solid_capstyle: round\\nfont.size: 10.0\\n\n    font.family: Trebuchet MS\\ntext.color: 575757\\naxes.facecolor: none\\n\n    axes.edgecolor: 575757\\naxes.spines.left   : True   \\naxes.spines.bottom : True\\n\n    axes.spines.top    : False\\naxes.spines.right  : False\\naxes.linewidth: 1\\naxes.grid: True\\n\n    axes.titlesize: x-large\\naxes.labelsize: large\\naxes.labelcolor: 575757\\naxes.axisbelow: True       \\n\n    axes.prop_cycle: cycler('color', ['29ba74', '6e6f73', '295e7e', '670f31', '98b21c', '9a9a9a', '3ead92'])\\n\n    xtick.color: 575757\\nxtick.direction: out\\nxtick.labelsize : medium\\nxtick.major.width: 1\\n\n    xtick.major.size: 4      \\nytick.color: 575757\\nytick.direction: out\\nytick.labelsize : medium\\n\n    ytick.major.width: 1\\nytick.major.size: 4\\ngrid.color: none\\nfigure.facecolor: none\\n\n    figure.edgecolor: 0.50\\nfigure.dpi: 150      \\n\"\"\"\n\n    with open(\"data/style/mystyle.mplstyle\", \"w+\") as f:\n        f.write(mpltxt)\n\n\nwrite_local_style()";
+                var nbb_cells = Jupyter.notebook.get_cells();
+                for (var i = 0; i < nbb_cells.length; ++i) {
+                    if (nbb_cells[i].input_prompt_number == nbb_cell_id) {
+                        if (nbb_cells[i].get_text() == nbb_unformatted_code) {
+                             nbb_cells[i].set_text(nbb_formatted_code);
+                        }
+                        break;
+                    }
+                }
+            }, 500);
+            </script></div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        
+        <div class='prev-next-bottom'>
+            
+
+        </div>
+        
+        </div>
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Richuang Lin<br/>
+        
+            &copy; Copyright 2021.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="_static/js/index.1c5a1a01449ed65a7b51.js"></script>
+
+  
+  </body>
+</html>

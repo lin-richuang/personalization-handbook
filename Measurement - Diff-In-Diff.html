@@ -1,0 +1,828 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Measurement - Diff-In-Diff method &#8212; A gentle introduction to personalization</title>
+    
+  <link href="_static/css/theme.css" rel="stylesheet" />
+  <link href="_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/sphinx-book-theme.acff12b8f9c144ce68a297486a2fa670.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="_static/js/index.1c5a1a01449ed65a7b51.js">
+
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/togglebutton.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="index.html">
+      
+      
+      <h1 class="site-logo" id="site-title">A gentle introduction to personalization</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <div class="bd-toc-item active">
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="landing-page.html">
+   Landing page
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Part I Measurement
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="Measurement%20-%20synthetic%20control.html">
+   Measurement - Synthetic control method (SCM)
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="_sources/Measurement - Diff-In-Diff.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/executablebooks/jupyter-book/master?urlpath=tree/Measurement - Diff-In-Diff.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#california-proposition-99">
+   California proposition 99
+  </a>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="measurement-diff-in-diff-method">
+<h1>Measurement - Diff-In-Diff method<a class="headerlink" href="#measurement-diff-in-diff-method" title="Permalink to this headline">¶</a></h1>
+<div class="cell tag_hide-input tag_hide-output docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> nb_black
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<script type="application/javascript">
+            setTimeout(function() {
+                var nbb_cell_id = 1;
+                var nbb_unformatted_code = "%load_ext nb_black";
+                var nbb_formatted_code = "%load_ext nb_black";
+                var nbb_cells = Jupyter.notebook.get_cells();
+                for (var i = 0; i < nbb_cells.length; ++i) {
+                    if (nbb_cells[i].input_prompt_number == nbb_cell_id) {
+                        if (nbb_cells[i].get_text() == nbb_unformatted_code) {
+                             nbb_cells[i].set_text(nbb_formatted_code);
+                        }
+                        break;
+                    }
+                }
+            }, 500);
+            </script></div>
+</div>
+<div class="cell tag_hide-input tag_hide-output docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">import</span> <span class="nn">scipy.stats</span> <span class="k">as</span> <span class="nn">st</span>
+<span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">Lasso</span><span class="p">,</span> <span class="n">ElasticNet</span><span class="p">,</span> <span class="n">Ridge</span><span class="p">,</span> <span class="n">LinearRegression</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">import</span> <span class="nn">statsmodels.formula.api</span> <span class="k">as</span> <span class="nn">smf</span>
+
+<span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+
+<span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s2">&quot;display.max_columns&quot;</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+
+<span class="c1"># style plots</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;data/style/mystyle.mplstyle&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<script type="application/javascript">
+            setTimeout(function() {
+                var nbb_cell_id = 2;
+                var nbb_unformatted_code = "import numpy as np\nfrom matplotlib import pyplot as plt\nimport scipy.stats as st\nfrom sklearn.linear_model import Lasso, ElasticNet, Ridge, LinearRegression\nimport pandas as pd\nimport warnings\nimport statsmodels.formula.api as smf\n\nwarnings.simplefilter(\"ignore\")\n\npd.set_option(\"display.max_columns\", 8)\n\n# style plots\nplt.style.use(\"data/style/mystyle.mplstyle\")";
+                var nbb_formatted_code = "import numpy as np\nfrom matplotlib import pyplot as plt\nimport scipy.stats as st\nfrom sklearn.linear_model import Lasso, ElasticNet, Ridge, LinearRegression\nimport pandas as pd\nimport warnings\nimport statsmodels.formula.api as smf\n\nwarnings.simplefilter(\"ignore\")\n\npd.set_option(\"display.max_columns\", 8)\n\n# style plots\nplt.style.use(\"data/style/mystyle.mplstyle\")";
+                var nbb_cells = Jupyter.notebook.get_cells();
+                for (var i = 0; i < nbb_cells.length; ++i) {
+                    if (nbb_cells[i].input_prompt_number == nbb_cell_id) {
+                        if (nbb_cells[i].get_text() == nbb_unformatted_code) {
+                             nbb_cells[i].set_text(nbb_formatted_code);
+                        }
+                        break;
+                    }
+                }
+            }, 500);
+            </script></div>
+</div>
+<div class="section" id="california-proposition-99">
+<h2>California proposition 99<a class="headerlink" href="#california-proposition-99" title="Permalink to this headline">¶</a></h2>
+<p>To see it in action, let’s consider the problem of estimating the effect of cigarette taxation on its consumption.</p>
+<p>In 1988, California passed a famous Tobacco Tax and Health Protection Act, which became known as Proposition 99.
+“Its primary effect is to impose a 25-cent per pack state excise tax on the sale of tobacco cigarettes within California, with approximately equivalent excise taxes similarly imposed on the retail sale of other commercial tobacco products, such as cigars and chewing tobacco. Additional restrictions placed on the sale of tobacco include a ban on cigarette vending machines in public areas accessible by juveniles and a ban on the individual sale of single cigarettes. Revenue generated by the act was earmarked for various environmental and health care programs, and anti-tobacco advertisements.”</p>
+<p>To evaluate its effect, we can gather data on cigarette sales from multiple states and across a number of years. In our case, we got data from the years 1970 to 2000 from 39 states. Other states had similar Tobacco control programs and were dropped from the analysis. Here is what our data looks like.</p>
+<div class="cell tag_hide-input docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;data/california_prop99.csv&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<script type="application/javascript">
+            setTimeout(function() {
+                var nbb_cell_id = 3;
+                var nbb_unformatted_code = "df = pd.read_csv(\"data/california_prop99.csv\")";
+                var nbb_formatted_code = "df = pd.read_csv(\"data/california_prop99.csv\")";
+                var nbb_cells = Jupyter.notebook.get_cells();
+                for (var i = 0; i < nbb_cells.length; ++i) {
+                    if (nbb_cells[i].input_prompt_number == nbb_cell_id) {
+                        if (nbb_cells[i].get_text() == nbb_unformatted_code) {
+                             nbb_cells[i].set_text(nbb_formatted_code);
+                        }
+                        break;
+                    }
+                }
+            }, 500);
+            </script></div>
+</div>
+<div class="cell tag_hide-input docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Pivot data for downstream work, and seperate sales of California and other states. </span>
+
+<span class="n">inverted</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span>
+        <span class="n">california</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+            <span class="n">df</span><span class="p">[</span><span class="s2">&quot;State&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;California&quot;</span><span class="p">,</span> <span class="s2">&quot;California&quot;</span><span class="p">,</span> <span class="s2">&quot;National average&quot;</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+    <span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;Year&quot;</span><span class="p">,</span> <span class="s2">&quot;california&quot;</span><span class="p">])[</span><span class="s2">&quot;PacksPerCapita&quot;</span><span class="p">]</span>
+    <span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+    <span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+<span class="p">)</span>
+
+<span class="n">inverted</span> <span class="o">=</span> <span class="n">inverted</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">treated</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">inverted</span><span class="p">[</span><span class="s2">&quot;Year&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">1989</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+
+<span class="n">inverted</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Year</th>
+      <th>california</th>
+      <th>PacksPerCapita</th>
+      <th>treated</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1970</td>
+      <td>California</td>
+      <td>123.000000</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1970</td>
+      <td>National average</td>
+      <td>120.084212</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>1971</td>
+      <td>California</td>
+      <td>121.000000</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1971</td>
+      <td>National average</td>
+      <td>123.863158</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>1972</td>
+      <td>California</td>
+      <td>123.500000</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><script type="application/javascript">
+            setTimeout(function() {
+                var nbb_cell_id = 4;
+                var nbb_unformatted_code = "# Pivot data for downstream work, and seperate sales of California and other states. \n\ninverted = (\n    df.assign(\n        california=np.where(\n            df[\"State\"] == \"California\", \"California\", \"National average\"\n        )\n    )\n    .groupby([\"Year\", \"california\"])[\"PacksPerCapita\"]\n    .mean()\n    .reset_index()\n)\n\ninverted = inverted.assign(treated=np.where(inverted[\"Year\"] >= 1989, 1, 0))\n\ninverted.head()";
+                var nbb_formatted_code = "# Pivot data for downstream work, and seperate sales of California and other states.\n\ninverted = (\n    df.assign(\n        california=np.where(\n            df[\"State\"] == \"California\", \"California\", \"National average\"\n        )\n    )\n    .groupby([\"Year\", \"california\"])[\"PacksPerCapita\"]\n    .mean()\n    .reset_index()\n)\n\ninverted = inverted.assign(treated=np.where(inverted[\"Year\"] >= 1989, 1, 0))\n\ninverted.head()";
+                var nbb_cells = Jupyter.notebook.get_cells();
+                for (var i = 0; i < nbb_cells.length; ++i) {
+                    if (nbb_cells[i].input_prompt_number == nbb_cell_id) {
+                        if (nbb_cells[i].get_text() == nbb_unformatted_code) {
+                             nbb_cells[i].set_text(nbb_formatted_code);
+                        }
+                        break;
+                    }
+                }
+            }, 500);
+            </script></div>
+</div>
+<div class="cell tag_hide-input docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="n">inverted</span><span class="o">.</span><span class="n">pivot</span><span class="p">(</span><span class="s2">&quot;Year&quot;</span><span class="p">,</span> <span class="s2">&quot;california&quot;</span><span class="p">,</span> <span class="s2">&quot;PacksPerCapita&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+    <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">lw</span><span class="o">=</span><span class="mi">3</span>
+<span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">vlines</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">1988</span><span class="p">,</span> <span class="n">ymin</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="mi">140</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Proposition 99&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Cigarette Sales Trend&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Per-capita cigarette sales (in packs)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/Measurement - Diff-In-Diff_6_0.png" src="_images/Measurement - Diff-In-Diff_6_0.png" />
+<script type="application/javascript">
+            setTimeout(function() {
+                var nbb_cell_id = 5;
+                var nbb_unformatted_code = "ax = plt.subplot(1, 1, 1)\n\ninverted.pivot(\"Year\", \"california\", \"PacksPerCapita\").plot(\n    ax=ax, figsize=(10, 5), lw=3\n)\n\nplt.vlines(x=1988, ymin=40, ymax=140, linestyle=\":\", lw=2, label=\"Proposition 99\")\nplt.ylabel(\"Cigarette Sales Trend\")\nplt.title(\"Per-capita cigarette sales (in packs)\")\nplt.legend()\nplt.show()";
+                var nbb_formatted_code = "ax = plt.subplot(1, 1, 1)\n\ninverted.pivot(\"Year\", \"california\", \"PacksPerCapita\").plot(\n    ax=ax, figsize=(10, 5), lw=3\n)\n\nplt.vlines(x=1988, ymin=40, ymax=140, linestyle=\":\", lw=2, label=\"Proposition 99\")\nplt.ylabel(\"Cigarette Sales Trend\")\nplt.title(\"Per-capita cigarette sales (in packs)\")\nplt.legend()\nplt.show()";
+                var nbb_cells = Jupyter.notebook.get_cells();
+                for (var i = 0; i < nbb_cells.length; ++i) {
+                    if (nbb_cells[i].input_prompt_number == nbb_cell_id) {
+                        if (nbb_cells[i].get_text() == nbb_unformatted_code) {
+                             nbb_cells[i].set_text(nbb_formatted_code);
+                        }
+                        break;
+                    }
+                }
+            }, 500);
+            </script></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">inverted</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;treated&quot;</span><span class="p">,</span> <span class="s2">&quot;california&quot;</span><span class="p">])[</span><span class="s2">&quot;PacksPerCapita&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>treated  california      
+0        California          116.210526
+         National average    130.569529
+1        California           60.350000
+         National average    102.058114
+Name: PacksPerCapita, dtype: float64
+</pre></div>
+</div>
+<script type="application/javascript">
+            setTimeout(function() {
+                var nbb_cell_id = 6;
+                var nbb_unformatted_code = "inverted.groupby([\"treated\", \"california\"])[\"PacksPerCapita\"].mean()";
+                var nbb_formatted_code = "inverted.groupby([\"treated\", \"california\"])[\"PacksPerCapita\"].mean()";
+                var nbb_cells = Jupyter.notebook.get_cells();
+                for (var i = 0; i < nbb_cells.length; ++i) {
+                    if (nbb_cells[i].input_prompt_number == nbb_cell_id) {
+                        if (nbb_cells[i].get_text() == nbb_unformatted_code) {
+                             nbb_cells[i].set_text(nbb_formatted_code);
+                        }
+                        break;
+                    }
+                }
+            }, 500);
+            </script></div>
+</div>
+<p>Here, you can see the National average pre intervention is 130 packs, while California’s sales is slightly lower at 116 packs.
+After intervention, California siginificant decresed the sales to 60 packs per capita, and national average also dropped to 102 packs.</p>
+<p>Below we compare the pre and post sales for California:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cal_pre_intervention</span> <span class="o">=</span> <span class="n">inverted</span><span class="p">[</span>
+    <span class="p">(</span><span class="n">inverted</span><span class="p">[</span><span class="s2">&quot;treated&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">inverted</span><span class="p">[</span><span class="s2">&quot;california&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;California&quot;</span><span class="p">)</span>
+<span class="p">][</span><span class="s2">&quot;PacksPerCapita&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="n">cal_post_intervention</span> <span class="o">=</span> <span class="n">inverted</span><span class="p">[</span>
+    <span class="p">(</span><span class="n">inverted</span><span class="p">[</span><span class="s2">&quot;treated&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">inverted</span><span class="p">[</span><span class="s2">&quot;california&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;California&quot;</span><span class="p">)</span>
+<span class="p">][</span><span class="s2">&quot;PacksPerCapita&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+
+<span class="nb">print</span><span class="p">(</span>
+    <span class="sa">f</span><span class="s2">&quot;The difference of California pre and post intervention is </span><span class="si">{</span><span class="n">cal_post_intervention</span> <span class="o">-</span> <span class="n">cal_pre_intervention</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The difference of California pre and post intervention is -55.86052625267542
+</pre></div>
+</div>
+<script type="application/javascript">
+            setTimeout(function() {
+                var nbb_cell_id = 7;
+                var nbb_unformatted_code = "cal_pre_intervention = inverted[\n    (inverted[\"treated\"] == 0) & (inverted[\"california\"] == \"California\")\n][\"PacksPerCapita\"].mean()\ncal_post_intervention = inverted[\n    (inverted[\"treated\"] == 1) & (inverted[\"california\"] == \"California\")\n][\"PacksPerCapita\"].mean()\n\n\nprint(\n    f\"The difference of California pre and post intervention is {cal_post_intervention - cal_pre_intervention}\"\n)";
+                var nbb_formatted_code = "cal_pre_intervention = inverted[\n    (inverted[\"treated\"] == 0) & (inverted[\"california\"] == \"California\")\n][\"PacksPerCapita\"].mean()\ncal_post_intervention = inverted[\n    (inverted[\"treated\"] == 1) & (inverted[\"california\"] == \"California\")\n][\"PacksPerCapita\"].mean()\n\n\nprint(\n    f\"The difference of California pre and post intervention is {cal_post_intervention - cal_pre_intervention}\"\n)";
+                var nbb_cells = Jupyter.notebook.get_cells();
+                for (var i = 0; i < nbb_cells.length; ++i) {
+                    if (nbb_cells[i].input_prompt_number == nbb_cell_id) {
+                        if (nbb_cells[i].get_text() == nbb_unformatted_code) {
+                             nbb_cells[i].set_text(nbb_formatted_code);
+                        }
+                        break;
+                    }
+                }
+            }, 500);
+            </script></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">national_post_intervention</span> <span class="o">=</span> <span class="n">inverted</span><span class="p">[</span>
+    <span class="p">(</span><span class="n">inverted</span><span class="p">[</span><span class="s2">&quot;treated&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">inverted</span><span class="p">[</span><span class="s2">&quot;california&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;National average&quot;</span><span class="p">)</span>
+<span class="p">][</span><span class="s2">&quot;PacksPerCapita&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span>
+    <span class="sa">f</span><span class="s2">&quot;And the difference of California and national average post intervention is </span><span class="si">{</span><span class="n">cal_post_intervention</span> <span class="o">-</span> <span class="n">national_post_intervention</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>And the difference of California and national average post intervention is -41.70811388026315
+</pre></div>
+</div>
+<script type="application/javascript">
+            setTimeout(function() {
+                var nbb_cell_id = 8;
+                var nbb_unformatted_code = "national_post_intervention = inverted[\n    (inverted[\"treated\"] == 1) & (inverted[\"california\"] == \"National average\")\n][\"PacksPerCapita\"].mean()\n\nprint(\n    f\"And the difference of California and national average post intervention is {cal_post_intervention - national_post_intervention}\"\n)";
+                var nbb_formatted_code = "national_post_intervention = inverted[\n    (inverted[\"treated\"] == 1) & (inverted[\"california\"] == \"National average\")\n][\"PacksPerCapita\"].mean()\n\nprint(\n    f\"And the difference of California and national average post intervention is {cal_post_intervention - national_post_intervention}\"\n)";
+                var nbb_cells = Jupyter.notebook.get_cells();
+                for (var i = 0; i < nbb_cells.length; ++i) {
+                    if (nbb_cells[i].input_prompt_number == nbb_cell_id) {
+                        if (nbb_cells[i].get_text() == nbb_unformatted_code) {
+                             nbb_cells[i].set_text(nbb_formatted_code);
+                        }
+                        break;
+                    }
+                }
+            }, 500);
+            </script></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">national_pre_intervention</span> <span class="o">=</span> <span class="n">inverted</span><span class="p">[</span>
+    <span class="p">(</span><span class="n">inverted</span><span class="p">[</span><span class="s2">&quot;treated&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">inverted</span><span class="p">[</span><span class="s2">&quot;california&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;National average&quot;</span><span class="p">)</span>
+<span class="p">][</span><span class="s2">&quot;PacksPerCapita&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+<span class="n">diff_in_diff</span> <span class="o">=</span> <span class="p">(</span><span class="n">cal_post_intervention</span> <span class="o">-</span> <span class="n">cal_pre_intervention</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span>
+    <span class="n">national_post_intervention</span> <span class="o">-</span> <span class="n">national_pre_intervention</span>
+<span class="p">)</span>
+<span class="n">diff_in_diff</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Finally the difference in difference is </span><span class="si">{</span><span class="n">diff_in_diff</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Finally the difference in difference is -27.34911108361495
+</pre></div>
+</div>
+<script type="application/javascript">
+            setTimeout(function() {
+                var nbb_cell_id = 9;
+                var nbb_unformatted_code = "national_pre_intervention = inverted[\n    (inverted[\"treated\"] == 0) & (inverted[\"california\"] == \"National average\")\n][\"PacksPerCapita\"].mean()\n\ndiff_in_diff = (cal_post_intervention - cal_pre_intervention) - (\n    national_post_intervention - national_pre_intervention\n)\ndiff_in_diff\n\nprint(f\"Finally the difference in difference is {diff_in_diff}\")";
+                var nbb_formatted_code = "national_pre_intervention = inverted[\n    (inverted[\"treated\"] == 0) & (inverted[\"california\"] == \"National average\")\n][\"PacksPerCapita\"].mean()\n\ndiff_in_diff = (cal_post_intervention - cal_pre_intervention) - (\n    national_post_intervention - national_pre_intervention\n)\ndiff_in_diff\n\nprint(f\"Finally the difference in difference is {diff_in_diff}\")";
+                var nbb_cells = Jupyter.notebook.get_cells();
+                for (var i = 0; i < nbb_cells.length; ++i) {
+                    if (nbb_cells[i].input_prompt_number == nbb_cell_id) {
+                        if (nbb_cells[i].get_text() == nbb_unformatted_code) {
+                             nbb_cells[i].set_text(nbb_formatted_code);
+                        }
+                        break;
+                    }
+                }
+            }, 500);
+            </script></div>
+</div>
+<p>To visualize what diff-in-diff is doing, we can project the growth trend from the untreated into the treated to see the counterfactual, that is, the sales we should expect if there were no intervention.</p>
+<div class="cell tag_hide-input docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+    <span class="p">[</span><span class="s2">&quot;Pre-intervention&quot;</span><span class="p">,</span> <span class="s2">&quot;Post-intervention&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="n">cal_pre_intervention</span><span class="p">,</span> <span class="n">cal_post_intervention</span><span class="p">],</span>
+    <span class="n">label</span><span class="o">=</span><span class="s2">&quot;California&quot;</span><span class="p">,</span>
+    <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+    <span class="p">[</span><span class="s2">&quot;Pre-intervention&quot;</span><span class="p">,</span> <span class="s2">&quot;Post-intervention&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="n">national_pre_intervention</span><span class="p">,</span> <span class="n">national_post_intervention</span><span class="p">],</span>
+    <span class="n">label</span><span class="o">=</span><span class="s2">&quot;National average&quot;</span><span class="p">,</span>
+    <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+    <span class="p">[</span><span class="s2">&quot;Pre-intervention&quot;</span><span class="p">,</span> <span class="s2">&quot;Post-intervention&quot;</span><span class="p">],</span>
+    <span class="p">[</span>
+        <span class="n">cal_pre_intervention</span><span class="p">,</span>
+        <span class="n">cal_pre_intervention</span> <span class="o">+</span> <span class="p">(</span><span class="n">national_post_intervention</span> <span class="o">-</span> <span class="n">national_pre_intervention</span><span class="p">),</span>
+    <span class="p">],</span>
+    <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Counterfactual&quot;</span><span class="p">,</span>
+    <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">color</span><span class="o">=</span><span class="s2">&quot;C2&quot;</span><span class="p">,</span>
+    <span class="n">ls</span><span class="o">=</span><span class="s2">&quot;-.&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Per-capita cigarette sales (in packs) - Pre and Post&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/Measurement - Diff-In-Diff_13_0.png" src="_images/Measurement - Diff-In-Diff_13_0.png" />
+<script type="application/javascript">
+            setTimeout(function() {
+                var nbb_cell_id = 10;
+                var nbb_unformatted_code = "plt.figure(figsize=(10, 5))\nplt.plot(\n    [\"Pre-intervention\", \"Post-intervention\"],\n    [cal_pre_intervention, cal_post_intervention],\n    label=\"California\",\n    lw=2,\n)\nplt.plot(\n    [\"Pre-intervention\", \"Post-intervention\"],\n    [national_pre_intervention, national_post_intervention],\n    label=\"National average\",\n    lw=2,\n)\n\nplt.plot(\n    [\"Pre-intervention\", \"Post-intervention\"],\n    [\n        cal_pre_intervention,\n        cal_pre_intervention + (national_post_intervention - national_pre_intervention),\n    ],\n    label=\"Counterfactual\",\n    lw=2,\n    color=\"C2\",\n    ls=\"-.\",\n)\nplt.title(\"Per-capita cigarette sales (in packs) - Pre and Post\")\nplt.legend()\nplt.show()";
+                var nbb_formatted_code = "plt.figure(figsize=(10, 5))\nplt.plot(\n    [\"Pre-intervention\", \"Post-intervention\"],\n    [cal_pre_intervention, cal_post_intervention],\n    label=\"California\",\n    lw=2,\n)\nplt.plot(\n    [\"Pre-intervention\", \"Post-intervention\"],\n    [national_pre_intervention, national_post_intervention],\n    label=\"National average\",\n    lw=2,\n)\n\nplt.plot(\n    [\"Pre-intervention\", \"Post-intervention\"],\n    [\n        cal_pre_intervention,\n        cal_pre_intervention + (national_post_intervention - national_pre_intervention),\n    ],\n    label=\"Counterfactual\",\n    lw=2,\n    color=\"C2\",\n    ls=\"-.\",\n)\nplt.title(\"Per-capita cigarette sales (in packs) - Pre and Post\")\nplt.legend()\nplt.show()";
+                var nbb_cells = Jupyter.notebook.get_cells();
+                for (var i = 0; i < nbb_cells.length; ++i) {
+                    if (nbb_cells[i].input_prompt_number == nbb_cell_id) {
+                        if (nbb_cells[i].get_text() == nbb_unformatted_code) {
+                             nbb_cells[i].set_text(nbb_formatted_code);
+                        }
+                        break;
+                    }
+                }
+            }, 500);
+            </script></div>
+</div>
+<p>We can use a linear estimator to do the same trick, more specifically:</p>
+<p><span class="math notranslate nohighlight">\(
+Y_i = \beta_0 + \beta_1 * treated + \beta_2 * cal + \beta_3 * treated * cal + \epsilon
+\)</span></p>
+<p>The \(\beta_0\) is the baseline of the control, which is the intercept of the regression.
+In our case, it is the packs of cigarette sold National average before 1989.</p>
+<p>The \(\beta_1\) is the impact of being in the time period after intervention. Combined with \(\beta_0\), we can see the sales of control after intervention.</p>
+<p>We can get sales of California pre intervention from combination of \(\beta_0\) and \(\beta_2\).</p>
+<p>And finally, if we turn all the dummy variables on, we get the sales of California after intervention. So \(\beta_3\) is the incremental impact when you go from pre intervention to post, and switch from national average to California. In other words, it is the difference in difference estimator.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mapping</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;California&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;National average&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+<span class="n">inverted</span><span class="p">[</span><span class="s2">&quot;cal&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">inverted</span><span class="p">[</span><span class="s2">&quot;california&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">mapping</span><span class="p">)</span>
+<span class="n">inverted</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Year</th>
+      <th>california</th>
+      <th>PacksPerCapita</th>
+      <th>treated</th>
+      <th>cal</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1970</td>
+      <td>California</td>
+      <td>123.000000</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1970</td>
+      <td>National average</td>
+      <td>120.084212</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>1971</td>
+      <td>California</td>
+      <td>121.000000</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1971</td>
+      <td>National average</td>
+      <td>123.863158</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>1972</td>
+      <td>California</td>
+      <td>123.500000</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><script type="application/javascript">
+            setTimeout(function() {
+                var nbb_cell_id = 11;
+                var nbb_unformatted_code = "mapping = {\"California\": 1, \"National average\": 0}\ninverted[\"cal\"] = inverted[\"california\"].replace(mapping)\ninverted.head()";
+                var nbb_formatted_code = "mapping = {\"California\": 1, \"National average\": 0}\ninverted[\"cal\"] = inverted[\"california\"].replace(mapping)\ninverted.head()";
+                var nbb_cells = Jupyter.notebook.get_cells();
+                for (var i = 0; i < nbb_cells.length; ++i) {
+                    if (nbb_cells[i].input_prompt_number == nbb_cell_id) {
+                        if (nbb_cells[i].get_text() == nbb_unformatted_code) {
+                             nbb_cells[i].set_text(nbb_formatted_code);
+                        }
+                        break;
+                    }
+                }
+            }, 500);
+            </script></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">smf</span><span class="o">.</span><span class="n">ols</span><span class="p">(</span><span class="s2">&quot;PacksPerCapita ~ treated*cal&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">inverted</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span><span class="o">.</span><span class="n">tables</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><table class="simpletable">
+<tr>
+       <td></td>          <th>coef</th>     <th>std err</th>      <th>t</th>      <th>P>|t|</th>  <th>[0.025</th>    <th>0.975]</th>  
+</tr>
+<tr>
+  <th>Intercept</th>   <td>  130.5695</td> <td>    2.262</td> <td>   57.724</td> <td> 0.000</td> <td>  126.042</td> <td>  135.097</td>
+</tr>
+<tr>
+  <th>treated</th>     <td>  -28.5114</td> <td>    3.636</td> <td>   -7.842</td> <td> 0.000</td> <td>  -35.789</td> <td>  -21.234</td>
+</tr>
+<tr>
+  <th>cal</th>         <td>  -14.3590</td> <td>    3.199</td> <td>   -4.489</td> <td> 0.000</td> <td>  -20.762</td> <td>   -7.956</td>
+</tr>
+<tr>
+  <th>treated:cal</th> <td>  -27.3491</td> <td>    5.141</td> <td>   -5.319</td> <td> 0.000</td> <td>  -37.641</td> <td>  -17.057</td>
+</tr>
+</table></div><script type="application/javascript">
+            setTimeout(function() {
+                var nbb_cell_id = 12;
+                var nbb_unformatted_code = "smf.ols(\"PacksPerCapita ~ treated*cal\", data=inverted).fit().summary().tables[1]";
+                var nbb_formatted_code = "smf.ols(\"PacksPerCapita ~ treated*cal\", data=inverted).fit().summary().tables[1]";
+                var nbb_cells = Jupyter.notebook.get_cells();
+                for (var i = 0; i < nbb_cells.length; ++i) {
+                    if (nbb_cells[i].input_prompt_number == nbb_cell_id) {
+                        if (nbb_cells[i].get_text() == nbb_unformatted_code) {
+                             nbb_cells[i].set_text(nbb_formatted_code);
+                        }
+                        break;
+                    }
+                }
+            }, 500);
+            </script></div>
+</div>
+<p>Here, the model shows that before 1989, national average sales of cigarettes is 130 packs, which matches our previous data.</p>
+<p>The sales post 1989 is 28 packs less than pre 1989 for national average.
+The pre 1989 sales of California is about 130 - 14 = 116 packs.</p>
+<p>Diff in diff is the <code class="docutils literal notranslate"><span class="pre">treated:cal</span></code>, which is -27, same as the diff-in-diff calculation we did previously. The confidence interval is between [-17, 37].</p>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        
+        <div class='prev-next-bottom'>
+            
+
+        </div>
+        
+        </div>
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Richuang Lin<br/>
+        
+            &copy; Copyright 2021.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="_static/js/index.1c5a1a01449ed65a7b51.js"></script>
+
+  
+  </body>
+</html>
