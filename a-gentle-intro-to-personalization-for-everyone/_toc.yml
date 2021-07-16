@@ -3,4 +3,5 @@ root: landing-page
 parts:
   - caption: Part I Measurement
     chapters:
+    - file: Measurement - Diff-In-Diff.ipynb
     - file: Measurement - synthetic control.ipynb
